@@ -404,7 +404,7 @@ En la sección historial de cambios pon: creado por Jorge, elimina "Se agregaron
 **Prompt 1:**
 
 ```
-lista los puntos principales de toda la documentacion que generamos. se breve y conciso
+
 ```
 
 **Prompt 2:**

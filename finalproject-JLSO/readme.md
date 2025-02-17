@@ -31,7 +31,7 @@ https://closeai-blush.vercel.app/
 
 ### 0.5. URL o archivo comprimido del repositorio
 
-https://github.com/IamJorx/AI4Devs-finalproject-JLSO.git
+https://github.com/IamJorx/close-ai
 
 ---
 
@@ -93,7 +93,7 @@ Flujo de usuario esperado:
 
 ### **1.4. Instrucciones de instalación:**
 
-> Documenta de manera precisa las instrucciones para instalar y poner en marcha el proyecto en local (librerías, backend, frontend, servidor, base de datos, migraciones y semillas de datos, etc.)
+> En construcción
 
 ---
 
@@ -234,9 +234,6 @@ Vercel detectará los cambios y desplegará la nueva versión en `https://closea
 #### Despliegue del backend con Docker
 
 ```sh
-git clone https://github.com/IamJorx/AI4Devs-finalproject-JLSO.git
-cd AI4Devs-finalproject-JLSO
-
 docker-compose up -d --build
 ```
 
@@ -265,15 +262,9 @@ Close AI implementa diversas prácticas de seguridad para proteger los datos y g
 
 ## Seguridad en la base de datos
 
-- **Encriptación de datos sensibles:** Se utilizan algoritmos de encriptación para almacenar información crítica como credenciales de usuarios.
+- **Control de Acceso y Autenticación:** Crear un usuario de PostgreSQL con permisos limitados solo a las operaciones necesarias (LECTURA/ESCRITURA).
 - **Principio de privilegios mínimos:** Los usuarios de la base de datos tienen permisos restringidos según sus necesidades.
-
-**Ejemplo de conexión segura con PostgreSQL usando SQLAlchemy:**
-
-```python
-DATABASE_URL = "postgresql+asyncpg://usuario:password@localhost/close_ai"
-engine = create_async_engine(DATABASE_URL, pool_size=10, max_overflow=20)
-```
+- **Prevención de Inyecciones SQL:** Uso de consultas parametrizadas en SQLAlchemy.
 
 ---
 
@@ -777,51 +768,6 @@ Se debe diseñar y crear las tablas necesarias en PostgreSQL para almacenar arch
 ## 7. Pull Requests
 
 **Pull Request 1**
-
-Resumen de la Documentación Generada para Close AI
-
-1. Descripción General del Producto
-
-   - Objetivo: Automatizar la comparación de transacciones bancarias desde archivos Excel.
-   - Características principales: Carga de archivos, procesamiento de transacciones, comparación y generación de reportes en Excel.
-   - Infraestructura: Backend en FastAPI, frontend en Next.js, base de datos en PostgreSQL.
-
-2. Arquitectura del Sistema
-
-   - Diagrama de arquitectura: Representación en Mermaid.js de la interacción entre frontend, backend y base de datos.
-   - Componentes principales: API REST, procesamiento con Pandas/FAISS, almacenamiento en PostgreSQL, generación de reportes.
-   - Despliegue: Backend con Docker y Nginx, frontend en Vercel, base de datos en servidor PostgreSQL.
-
-3. Modelo de Datos
-
-   - Entidades principales:
-   - archivos: Almacena los archivos subidos.
-   - transacciones: Contiene las transacciones procesadas.
-   - Relaciones: Cada archivo tiene múltiples transacciones.
-   - Optimización: Uso de JSONB para campos dinámicos y claves foráneas con eliminación en cascada.
-
-4. Especificación de la API
-
-   - POST /upload: Carga archivos Excel y procesa las transacciones.
-   - GET /comparar-excel: Compara dos archivos y genera un reporte en Excel con coincidencias y discrepancias.
-   - GET /archivo/{archivo_id}: Consulta las transacciones de un archivo específico.
-
-5. Historias de Usuario
-
-   - Subir archivo Excel para procesamiento.
-   - Comparar transacciones de dos archivos y generar un reporte.
-   - Consultar transacciones de un archivo para validación previa.
-
-6. Tickets de Trabajo
-
-   - Backend: Implementar el endpoint POST /upload para carga y procesamiento.
-   - Frontend: Desarrollar la UI de carga de archivos.
-   - Base de Datos: Crear estructura de almacenamiento de transacciones en PostgreSQL.
-
-7. Seguridad (para futuras versiones)
-
-- Sin autenticación en el MVP, pero con posibilidad de agregar API Key en futuras iteraciones.
-- Protección de datos: Validación de formatos, sanitización de datos, restricciones CORS.
 
 **Pull Request 2**
 
