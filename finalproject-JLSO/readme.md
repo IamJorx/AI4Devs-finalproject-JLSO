@@ -52,30 +52,30 @@ Close AI está diseñado para ayudar a instituciones financieras, contadores, au
 
 ### **1.2. Características y funcionalidades principales:**
 
-🔹 Comparación de transacciones
+Comparación de transacciones
 
 - Identificación de coincidencias exactas y transacciones con discrepancias.
 - Tolerancia a variaciones menores en montos y fechas.
 - Detección de estados inconsistentes (ej. “Exitosa” vs “Fallida”).
 
-📊 Análisis y Reportes
+Análisis y Reportes
 
 - Visualización de resultados en una interfaz intuitiva.
 - Descarga de reportes detallados en formatos Excel/CSV.
 - Búsqueda y filtrado avanzado de transacciones.
 
-🗂️ Gestión de Archivos -
+Gestión de Archivos -
 
 - Carga de dos archivos Excel para comparación.
 - Manejo eficiente de archivos grandes mediante procesamiento optimizado.
 
-⚡ Integración y API -
+Integración y API -
 
 - API en FastAPI para automatización de procesos.
 - Soporte para integración con sistemas externos.
 - Arquitectura modular para futuras expansiones.
 
-🔒 Seguridad
+Seguridad
 
 - Eliminar los datos de la base de datos después de la comparación.
 - Manejo seguro de archivos y eliminación automática después del análisis.
@@ -101,79 +101,727 @@ Flujo de usuario esperado:
 
 ### **2.1. Diagrama de arquitectura:**
 
-![Diagrama de arquitectura](./assets/closeai_architecture_diagram.png)
+![Diagrama de arquitectura](./assets/close-ai_architecture_diagram.png)
 
 [Link - Diagrama de arquitectura](https://app.eraser.io/workspace/nQyQCyIMGDgN8R2yeEZD?origin=share)
 
 ### **2.2. Descripción de componentes principales:**
 
-> Describe los componentes más importantes, incluyendo la tecnología utilizada
+### **2.2. Descripción de Componentes Principales**
+
+A continuación, se describen los componentes más importantes del sistema **Close AI**, junto con la tecnología utilizada en cada uno:
+
+#### **Frontend (Next.js)**
+
+- **Tecnología:** Next.js, TypeScript, TailwindCSS.
+- **Descripción:** Interfaz gráfica donde el usuario carga archivos Excel y visualiza los resultados de comparación. Se comunica con el backend mediante API REST.
+
+#### **Backend (FastAPI)**
+
+- **Tecnología:** FastAPI, Python, Uvicorn.
+- **Descripción:** Procesa las solicitudes del frontend, maneja la carga y comparación de transacciones, y expone los resultados a través de una API.
+
+#### **Servicio de Procesamiento**
+
+- **Tecnología:** Pandas, FAISS, SentenceTransformers.
+- **Descripción:** Analiza y compara las transacciones de los archivos Excel. Normaliza datos, detecta discrepancias y genera reportes.
+
+#### **Almacenamiento de Archivos (Temporal)**
+
+- **Tecnología:** Sistema de archivos local.
+- **Descripción:** Los archivos Excel se procesan en memoria sin ser almacenados. Los resultados se generan y descargan directamente desde la interfaz de usuario.
+
+#### **Base de Datos (PostgreSQL)**
+
+- **Tecnología:** PostgreSQL, SQLAlchemy (asyncpg).
+- **Descripción:** Almacena transacciones procesadas, facilita la comparación de datos y permite realizar consultas eficientes.
+
+#### **API Gateway**
+
+- **Tecnología:** FastAPI.
+- **Descripción:** Maneja las solicitudes API desde el frontend y las distribuye a los controladores del backend.
+
+#### **Seguridad**
+
+- **Tecnología:** OAuth2, JWT, CORS.
+- **Descripción:** Gestiona la autenticación y autorización de usuarios para proteger el acceso a los datos.
 
 ### **2.3. Descripción de alto nivel del proyecto y estructura de ficheros**
 
-> Representa la estructura del proyecto y explica brevemente el propósito de las carpetas principales, así como si obedece a algún patrón o arquitectura específica.
+### **2.3. Descripción de Alto Nivel del Proyecto y Estructura de Ficheros**
+
+Close AI sigue una **arquitectura modular basada en capas**, donde el **frontend (Next.js)** y el **backend (FastAPI)** están separados, facilitando la escalabilidad y el mantenimiento. El backend sigue el patrón **MVC (Model-View-Controller)** adaptado para API REST, mientras que el frontend gestiona la UI y las solicitudes API.
+
+### **Estructura de Ficheros**
+
+```plaintext
+close-ai/
+│── backend/                # Código fuente del backend (FastAPI)
+│   ├── app/                # Lógica principal del backend
+│   │   ├── api/            # Endpoints y controladores de la API
+│   │   ├── models/         # Definición de modelos SQLAlchemy
+│   │   ├── services/       # Lógica de negocio y procesamiento de transacciones
+│   │   ├── db/             # Configuración de la base de datos y migraciones
+│   │   ├── core/           # Configuraciones generales (seguridad, autenticación, etc.)
+│   │   ├── schemas/        # Esquemas Pydantic para validación de datos
+│   │   ├── utils/          # Funciones auxiliares y herramientas
+│   ├── tests/              # Pruebas automatizadas
+│   ├── main.py             # Punto de entrada del backend
+│   ├── requirements.txt    # Dependencias del backend
+│   ├── alembic/            # Migraciones de base de datos con Alembic
+│
+│── frontend/               # Código fuente del frontend (Next.js)
+│   ├── src/                # Lógica principal del frontend
+│   │   ├── components/     # Componentes reutilizables de React
+│   │   ├── pages/          # Rutas y vistas principales
+│   │   ├── services/       # Funciones para comunicación con la API
+│   │   ├── hooks/          # Hooks personalizados de React
+│   │   ├── styles/         # Estilos globales y de componentes
+│   ├── public/             # Recursos estáticos (imágenes, íconos, etc.)
+│   ├── package.json        # Dependencias del frontend
+│   ├── next.config.js      # Configuración de Next.js
+│
+│── docs/                   # Documentación del proyecto
+│── .env.example            # Variables de entorno de ejemplo
+│── docker-compose.yml      # Configuración de contenedores Docker
+│── README.md               # Documentación general del proyecto
+```
+
+---
+
+### **Explicación de la Arquitectura**
+
+1. **Backend desacoplado del frontend** → Facilita el mantenimiento y escalabilidad.
+2. **Uso de capas (MVC adaptado a API REST)** → Separa la lógica de negocio, los modelos y los controladores.
+3. **Base de datos gestionada con SQLAlchemy y PostgreSQL** → Permite consultas eficientes y persistencia estructurada.
+4. **Frontend modular con Next.js** → Organizado en **componentes, páginas y servicios** para una mejor reutilización.
+5. **Integración con FastAPI y PostgreSQL** → Conexión eficiente para procesamiento y almacenamiento de transacciones.
 
 ### **2.4. Infraestructura y despliegue**
 
-> Detalla la infraestructura del proyecto, incluyendo un diagrama en el formato que creas conveniente, y explica el proceso de despliegue que se sigue
+Close AI utiliza una infraestructura modular y escalable basada en **contenedores Docker** y servicios en la nube para facilitar su despliegue y mantenimiento. A continuación, se detalla la infraestructura del proyecto y el proceso de despliegue.
+
+![Infraestructura y despliegue](./assets/close-ai_deploy_diagram.png)
+
+[Link - Infraestructura y despliegue](https://app.eraser.io/workspace/KUo7LHd3I7iIrHMfQgNh?origin=share)
+
+#### **Componentes de Infraestructura**
+
+| Componente                | Tecnología                                   | Función                                                         |
+| ------------------------- | -------------------------------------------- | --------------------------------------------------------------- |
+| **Frontend**              | Next.js, TypeScript                          | Interfaz de usuario para carga y visualización de datos.        |
+| **Backend**               | FastAPI, Python                              | Procesa archivos y compara transacciones.                       |
+| **Base de Datos**         | PostgreSQL                                   | Almacena transacciones y facilita consultas eficientes.         |
+| **Búsqueda de Similitud** | FAISS, SentenceTransformers                  | Permite encontrar transacciones similares con embeddings.       |
+| **Contenedores**          | Docker, Docker Compose                       | Facilita la replicación del entorno de desarrollo y producción. |
+| **Proxy Reverso**         | Nginx                                        | Gestiona el tráfico de red y protege la API.                    |
+| **Despliegue en la Nube** | AWS/GCP (Opcional) - vercel para el frontend | Permite ejecutar la aplicación en servidores escalables.        |
+
+### Proceso de despliegue
+
+#### Despliegue del frontend en Vercel
+
+El frontend se despliega automáticamente en Vercel con cada push a la rama `main`.
+
+```sh
+git push origin main
+```
+
+Vercel detectará los cambios y desplegará la nueva versión en `https://closeai.vercel.app/`.
+
+---
+
+#### Despliegue del backend con Docker
+
+```sh
+git clone https://github.com/IamJorx/AI4Devs-finalproject-JLSO.git
+cd AI4Devs-finalproject-JLSO
+
+docker-compose up -d --build
+```
+
+---
+
+#### Configuración del servidor con Nginx
+
+```sh
+sudo systemctl restart nginx
+```
 
 ### **2.5. Seguridad**
 
-> Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede
+Close AI implementa diversas prácticas de seguridad para proteger los datos y garantizar la integridad del sistema. A continuación, se describen las principales medidas adoptadas:
+
+---
+
+## Protección contra ataques comunes
+
+- **CORS (Cross-Origin Resource Sharing):** Se configuran reglas estrictas para controlar qué dominios pueden acceder a la API.
+- **Rate Limiting:** Se establece un límite de solicitudes por minuto para prevenir ataques de fuerza bruta.
+- **Protección contra SQL Injection:** Uso de **SQLAlchemy ORM** para consultas parametrizadas en la base de datos.
+- **Protección contra XSS y CSRF:** Sanitización de entradas y validación de datos en el frontend y backend.
+
+---
+
+## Seguridad en la base de datos
+
+- **Encriptación de datos sensibles:** Se utilizan algoritmos de encriptación para almacenar información crítica como credenciales de usuarios.
+- **Principio de privilegios mínimos:** Los usuarios de la base de datos tienen permisos restringidos según sus necesidades.
+
+**Ejemplo de conexión segura con PostgreSQL usando SQLAlchemy:**
+
+```python
+DATABASE_URL = "postgresql+asyncpg://usuario:password@localhost/close_ai"
+engine = create_async_engine(DATABASE_URL, pool_size=10, max_overflow=20)
+```
+
+---
+
+## Seguridad en la infraestructura
+
+- **Firewall y control de acceso:** Se configuran reglas de firewall para restringir accesos no autorizados al servidor.
+- **Proxy reverso con Nginx:** Actúa como una capa de seguridad adicional para proteger el backend.
+- **Despliegue seguro en Vercel y servidores cloud:** Uso de HTTPS y certificados SSL para cifrar la comunicación.
+
+---
+
+## Beneficios de estas prácticas
+
+- Reducción del riesgo de ataques cibernéticos.
+- Mayor seguridad en la comunicación entre el frontend y el backend.
+- Protección de datos sensibles mediante encriptación y validaciones estrictas.
+
+Estas medidas garantizan un sistema seguro y confiable para el procesamiento de transacciones en Close AI.
 
 ### **2.6. Tests**
 
-> Describe brevemente algunos de los tests realizados
+#### Pruebas unitarias
+
+- **Procesamiento de datos:** Verificar que las funciones de normalización y limpieza de datos en Pandas funcionan correctamente.
+- **Comparación de transacciones:** Asegurar que el motor de comparación detecta correctamente coincidencias y discrepancias.
+- **Conversión de formatos:** Validar que los montos y fechas se convierten al formato estándar esperado.
+
+#### Pruebas de integración
+
+- **Conexión con PostgreSQL:** Comprobar que las transacciones se almacenan y consultan correctamente en la base de datos.
+- **API de procesamiento:** Validar que los endpoints del backend reciben archivos, procesan los datos y devuelven resultados esperados.
+- **Flujo completo:** Simular la carga de archivos y verificar que los resultados son correctos.
 
 ---
 
 ## 3. Modelo de Datos
 
-### **3.1. Diagrama del modelo de datos:**
+El modelo de datos de Close AI está diseñado para almacenar y gestionar transacciones bancarias procesadas a partir de archivos Excel. A continuación, se describe la estructura del modelo de base de datos.
 
-> Recomendamos usar mermaid para el modelo de datos, y utilizar todos los parámetros que permite la sintaxis para dar el máximo detalle, por ejemplo las claves primarias y foráneas.
+---
 
-### **3.2. Descripción de entidades principales:**
+### **3.1. Diagrama del modelo de datos**
 
-> Recuerda incluir el máximo detalle de cada entidad, como el nombre y tipo de cada atributo, descripción breve si procede, claves primarias y foráneas, relaciones y tipo de relación, restricciones (unique, not null…), etc.
+![Diagrama del modelo de datos](./assets/close-ai_database_diagram.png)
+
+```mermaid
+erDiagram
+    ARCHIVOS {
+        int id PK "Clave primaria"
+        text nombre_archivo "Nombre del archivo cargado"
+        timestamp fecha_carga "Fecha y hora en que se subió el archivo"
+    }
+
+    TRANSACCIONES {
+        int id PK "Clave primaria"
+        int archivo_id FK "Referencia al archivo de origen"
+        text id_transaccion "Identificador único de la transacción"
+        timestamp fecha "Fecha de la transacción"
+        text cuenta_origen "Número de cuenta origen"
+        text cuenta_destino "Número de cuenta destino"
+        decimal monto "Monto de la transacción"
+        text estado "Estado de la transacción (Exitosa, Fallida)"
+        json extra_data "Campos adicionales almacenados en formato JSON"
+    }
+
+    ARCHIVOS ||--|{ TRANSACCIONES : contiene
+```
+
+---
+
+### **3.2. Descripción de entidades principales**
+
+#### **1. Tabla `archivos`**
+
+| Atributo         | Tipo de dato | Restricciones                 | Descripción                              |
+| ---------------- | ------------ | ----------------------------- | ---------------------------------------- |
+| `id`             | `int`        | `PRIMARY KEY, AUTO_INCREMENT` | Identificador único del archivo.         |
+| `nombre_archivo` | `text`       | `NOT NULL`                    | Nombre del archivo subido.               |
+| `fecha_carga`    | `timestamp`  | `DEFAULT NOW()`               | Fecha y hora en que se subió el archivo. |
+
+- **Relaciones:** Un archivo puede contener múltiples transacciones.
+
+---
+
+#### **2. Tabla `transacciones`**
+
+| Atributo         | Tipo de dato    | Restricciones                                           | Descripción                                               |
+| ---------------- | --------------- | ------------------------------------------------------- | --------------------------------------------------------- |
+| `id`             | `int`           | `PRIMARY KEY, AUTO_INCREMENT`                           | Identificador único de la transacción.                    |
+| `archivo_id`     | `int`           | `FOREIGN KEY REFERENCES archivos(id) ON DELETE CASCADE` | Relación con el archivo de origen.                        |
+| `id_transaccion` | `text`          | `NOT NULL`                                              | Identificador único de la transacción dentro del archivo. |
+| `fecha`          | `timestamp`     | `NOT NULL`                                              | Fecha de la transacción.                                  |
+| `cuenta_origen`  | `text`          | `NOT NULL`                                              | Número de cuenta origen.                                  |
+| `cuenta_destino` | `text`          | `NOT NULL`                                              | Número de cuenta destino.                                 |
+| `monto`          | `decimal(12,2)` | `NOT NULL`                                              | Monto de la transacción.                                  |
+| `estado`         | `text`          | `CHECK(estado IN ('Exitosa', 'Fallida'))`               | Estado de la transacción.                                 |
+| `extra_data`     | `json`          | `NULLABLE`                                              | Campos adicionales en formato JSON.                       |
+
+- **Relaciones:**
+  - Cada transacción pertenece a un archivo específico (`archivo_id`).
+  - El `id_transaccion` se usa para la comparación entre archivos.
+
+---
+
+### **Consideraciones adicionales**
+
+- **Uso de `extra_data (JSONB)`**: Permite almacenar columnas adicionales sin modificar la estructura principal.
+- **Optimización de consultas**: Se recomienda indexar `id_transaccion` para mejorar la eficiencia de búsqueda.
+- **Integridad referencial**: Se utiliza `ON DELETE CASCADE` para eliminar transacciones si se borra un archivo.
+
+---
+
+Este modelo de datos permite gestionar eficientemente los archivos subidos y comparar las transacciones de manera estructurada en Close AI.
 
 ---
 
 ## 4. Especificación de la API
 
-> Si tu backend se comunica a través de API, describe los endpoints principales (máximo 3) en formato OpenAPI. Opcionalmente puedes añadir un ejemplo de petición y de respuesta para mayor claridad
+## 4. Especificación de la API
+
+Close AI expone una API REST desarrollada con **FastAPI**, permitiendo la carga de archivos, el procesamiento de transacciones y la generación de reportes en Excel con los resultados de comparación. A continuación, se describen los **tres endpoints principales** en formato **OpenAPI**.
+
+---
+
+### **4.1. Endpoints principales**
+
+### **1. Subir archivo y procesar transacciones**
+
+**Descripción:** Permite subir un archivo Excel con transacciones bancarias, procesarlo y almacenarlo en la base de datos.
+
+```yaml
+POST /upload
+Summary: Cargar un archivo Excel para procesamiento
+Request Body:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          file:
+            type: string
+            format: binary
+            description: Archivo Excel (.xlsx) con las transacciones
+
+Responses:
+  200:
+    description: Archivo procesado con éxito
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            archivo_id:
+              type: integer
+              description: ID del archivo almacenado
+  400:
+    description: Archivo inválido o formato no soportado
+```
+
+**Ejemplo de respuesta:**
+
+```json
+{
+	"archivo_id": 15
+}
+```
+
+---
+
+### **2. Comparar transacciones entre dos archivos y generar Excel**
+
+**Descripción:** Compara las transacciones de dos archivos, agrupando coincidencias y transacciones no coincidentes, y genera un archivo Excel con los resultados.
+
+```yaml
+GET /comparar-excel
+Summary: Comparar transacciones entre dos archivos y generar un archivo Excel con los resultados
+Parameters:
+  - name: archivo_id_1
+    in: query
+    required: true
+    schema:
+      type: integer
+  - name: archivo_id_2
+    in: query
+    required: true
+    schema:
+      type: integer
+
+Responses:
+  200:
+    description: Archivo Excel generado con los resultados de la comparación
+    content:
+      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+        schema:
+          type: string
+          format: binary
+  404:
+    description: Uno o ambos archivos no encontrados
+```
+
+**Ejemplo de resultado:**
+
+- Se genera un archivo Excel con tres secciones:
+  1. **Coincidencias exactas:** Transacciones que coinciden completamente en ambos archivos.
+  2. **Coincidencias con discrepancias:** Transacciones con el mismo `id_transaccion`, pero diferencias en estado o monto.
+  3. **Registros sin coincidencias:** Transacciones que solo aparecen en uno de los dos archivos.
+
+**Ejemplo de respuesta (archivo Excel descargable)**  
+Encabezados esperados en el Excel:
+| ID Transacción | Fecha | Cuenta Origen | Cuenta Destino | Monto Archivo 1 | Monto Archivo 2 | Estado Archivo 1 | Estado Archivo 2 | Tipo de Coincidencia |
+|---------------|------|---------------|---------------|----------------|----------------|----------------|----------------|----------------|
+| TXN001 | 2024-02-14 | 123456 | 654321 | 100.00 | 100.00 | Exitosa | Exitosa | Coincidencia exacta |
+| TXN002 | 2024-02-14 | 987654 | 321987 | 200.00 | 210.00 | Exitosa | Exitosa | Diferencia en monto |
+| TXN003 | 2024-02-14 | 555555 | 444444 | 500.00 | - | Exitosa | - | Solo en Archivo 1 |
+| TXN004 | 2024-02-14 | 111111 | 999999 | - | 350.00 | - | Fallida | Solo en Archivo 2 |
+
+---
+
+### **3. Obtener transacciones almacenadas de un archivo**
+
+**Descripción:** Permite consultar todas las transacciones procesadas de un archivo específico.
+
+```yaml
+GET /archivo/{archivo_id}
+Summary: Obtener transacciones de un archivo específico
+Parameters:
+  - name: archivo_id
+    in: path
+    required: true
+    schema:
+      type: integer
+
+Responses:
+  200:
+    description: Lista de transacciones del archivo
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            transacciones:
+              type: array
+              items:
+                type: object
+                properties:
+                  id_transaccion:
+                    type: string
+                  fecha:
+                    type: string
+                    format: date-time
+                  cuenta_origen:
+                    type: string
+                  cuenta_destino:
+                    type: string
+                  monto:
+                    type: number
+                  estado:
+                    type: string
+  404:
+    description: Archivo no encontrado
+```
+
+**Ejemplo de respuesta:**
+
+```json
+{
+	"transacciones": [
+		{
+			"id_transaccion": "TXN98765",
+			"fecha": "2024-02-14T12:30:00",
+			"cuenta_origen": "123456789",
+			"cuenta_destino": "987654321",
+			"monto": 500.0,
+			"estado": "Exitosa"
+		}
+	]
+}
+```
+
+---
+
+### **4.2. Consideraciones**
+
+- La API sigue el formato **RESTful** para facilitar la integración.
+- Los resultados de la comparación **se agrupan y se exportan en un archivo Excel** para facilitar la revisión manual.
+- Se validan los datos para garantizar la integridad del procesamiento.
+
+Estos endpoints permiten gestionar archivos, comparar transacciones y obtener resultados de manera eficiente en Close AI.
 
 ---
 
 ## 5. Historias de Usuario
 
-> Documenta 3 de las historias de usuario principales utilizadas durante el desarrollo, teniendo en cuenta las buenas prácticas de producto al respecto.
-
 **Historia de Usuario 1**
+
+### **Subir un archivo Excel con transacciones**
+
+**Formato estándar:**  
+Como usuario del sistema, quiero subir un archivo Excel con transacciones bancarias para que Close AI lo procese y almacene en la base de datos.
+
+**Descripción:**  
+El usuario debe poder cargar un archivo Excel que contenga transacciones bancarias. El sistema validará el formato del archivo, procesará los datos y almacenará las transacciones en la base de datos.
+
+**Criterios de Aceptación:**
+
+- **Dado que** el usuario accede a la interfaz de carga de archivos,
+- **cuando** selecciona un archivo Excel válido y presiona "Subir",
+- **entonces** el sistema debe procesar el archivo, almacenar los datos y devolver un `archivo_id` para futuras consultas.
+- **Si el archivo tiene un formato incorrecto**, el sistema debe mostrar un mensaje de error.
+
+**Notas adicionales:**
+
+- El sistema solo debe aceptar archivos en formato `.xlsx`.
+- Se debe validar que el archivo no esté vacío.
+
+**Tareas:**
+
+- [ ] Implementar endpoint `POST /upload`.
+- [ ] Validar el formato del archivo en el backend.
+- [ ] Procesar y almacenar los datos en la base de datos.
+- [ ] Mostrar mensajes de error en caso de archivo inválido.
+- [ ] Probar la funcionalidad con archivos de prueba.
 
 **Historia de Usuario 2**
 
+### **Comparar transacciones de dos archivos y generar un reporte**
+
+**Formato estándar:**  
+Como usuario del sistema, quiero comparar dos archivos Excel para identificar coincidencias y discrepancias en las transacciones.
+
+**Descripción:**  
+El usuario debe poder seleccionar dos archivos previamente subidos para comparar sus transacciones. El sistema identificará coincidencias exactas, discrepancias y transacciones únicas en cada archivo, generando un reporte en Excel.
+
+**Criterios de Aceptación:**
+
+- **Dado que** el usuario selecciona dos archivos previamente subidos,
+- **cuando** solicita la comparación,
+- **entonces** el sistema debe procesar las transacciones, agrupar los resultados y generar un archivo Excel descargable con el análisis.
+- **Si uno de los archivos no existe**, el sistema debe mostrar un error.
+
+**Notas adicionales:**
+
+- El reporte debe contener tres secciones: coincidencias exactas, diferencias en estado/monto, y transacciones sin coincidencias.
+
+**Tareas:**
+
+- [ ] Implementar endpoint `GET /comparar-excel`.
+- [ ] Procesar las transacciones de ambos archivos.
+- [ ] Generar el reporte en formato `.xlsx`.
+- [ ] Permitir la descarga del archivo con los resultados.
+- [ ] Validar que ambos archivos existen antes de iniciar la comparación.
+
 **Historia de Usuario 3**
+
+### **Consultar las transacciones de un archivo específico**
+
+**Formato estándar:**  
+Como usuario del sistema, quiero consultar las transacciones de un archivo específico para revisar su contenido antes de realizar comparaciones.
+
+**Descripción:**  
+El usuario podrá acceder a la lista de transacciones de un archivo previamente subido mediante su `archivo_id`. Esto permitirá validar si los datos fueron procesados correctamente.
+
+**Criterios de Aceptación:**
+
+- **Dado que** el usuario ingresa un `archivo_id` válido,
+- **cuando** consulta las transacciones,
+- **entonces** el sistema debe devolver la lista de transacciones en formato JSON.
+- **Si el archivo no existe**, el sistema debe responder con un error.
+
+**Notas adicionales:**
+
+- Esta funcionalidad es útil para depuración y verificación de datos antes de la comparación.
+
+**Tareas:**
+
+- [ ] Implementar endpoint `GET /archivo/{archivo_id}`.
+- [ ] Consultar las transacciones en la base de datos.
+- [ ] Formatear la respuesta en JSON.
+- [ ] Manejar errores si el archivo no existe.
 
 ---
 
 ## 6. Tickets de Trabajo
 
-> Documenta 3 de los tickets de trabajo principales del desarrollo, uno de backend, uno de frontend, y uno de bases de datos. Da todo el detalle requerido para desarrollar la tarea de inicio a fin teniendo en cuenta las buenas prácticas al respecto.
-
 **Ticket 1**
+
+### Ticket Backend - Implementar endpoint para carga y procesamiento de archivos Excel
+
+**Título:** Implementar endpoint `POST /upload` para carga y procesamiento de archivos Excel
+
+**Descripción:**  
+Se debe desarrollar un endpoint en FastAPI que permita a los usuarios cargar archivos Excel con transacciones bancarias. El backend validará el formato del archivo, normalizará los datos y almacenará las transacciones en la base de datos.
+
+**Criterios de Aceptación:**
+
+- El endpoint debe recibir archivos en formato `.xlsx`.
+- Se debe validar que el archivo no esté vacío.
+- Las transacciones deben ser extraídas y almacenadas en la base de datos.
+- Si el archivo es inválido, se debe retornar un mensaje de error con código `400`.
+- Si la carga es exitosa, se debe retornar un `archivo_id` con código `200`.
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, API, Sprint 1
+
+**Comentarios:**
+
+- Se debe manejar la validación de columnas y formatos antes de procesar los datos.
+- El procesamiento debe ser asíncrono para evitar bloqueos en la API.
+
+**Enlaces:**
+
+- [Especificación de la API - `POST /upload`](#4-especificación-de-la-api)
+
+**Historial de Cambios:**
+
+- 16/02/2025: Creado por Jorge
 
 **Ticket 2**
 
+### Ticket Frontend - Implementar interfaz de carga de archivos
+
+**Título:** Implementar interfaz de usuario para carga de archivos Excel
+
+**Descripción:**  
+Se debe diseñar y desarrollar una interfaz en Next.js que permita a los usuarios seleccionar y subir archivos Excel. La UI debe mostrar mensajes de éxito o error según el resultado del procesamiento.
+
+**Criterios de Aceptación:**
+
+- Debe incluir un botón de selección de archivo.
+- Debe validar que solo se puedan subir archivos `.xlsx`.
+- Al hacer clic en "Subir", debe llamar al endpoint `POST /upload`.
+- Si la carga es exitosa, mostrar el `archivo_id` en pantalla.
+- Si ocurre un error, mostrar un mensaje de error descriptivo.
+
+**Prioridad:** Media
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI, Sprint 1
+
+**Comentarios:**
+
+- Se recomienda usar TailwindCSS para los estilos.
+- Considerar manejo de carga y estado en React Hooks.
+
+**Enlaces:**
+
+- [Especificación de la API - `POST /upload`](#4-especificación-de-la-api)
+
+**Historial de Cambios:**
+
+- 16/02/2025: Creado por Jorge
+
 **Ticket 3**
+
+### Ticket Base de Datos - Diseñar y crear esquema de transacciones en PostgreSQL
+
+**Título:** Crear estructura de base de datos para almacenar transacciones
+
+**Descripción:**  
+Se debe diseñar y crear las tablas necesarias en PostgreSQL para almacenar archivos y transacciones. La base de datos debe permitir consultas eficientes para comparar transacciones entre archivos.
+
+**Criterios de Aceptación:**
+
+- Crear la tabla `archivos` con los campos `id`, `nombre_archivo` y `fecha_carga`.
+- Crear la tabla `transacciones` con los campos `id`, `archivo_id`, `id_transaccion`, `fecha`, `cuenta_origen`, `cuenta_destino`, `monto`, `estado`, `extra_data`.
+- Asegurar que `archivo_id` en `transacciones` sea una clave foránea que elimine en cascada.
+- Aplicar índices en `id_transaccion` para mejorar el rendimiento en comparación de archivos.
+
+**Prioridad:** Alta
+
+**Estimación:** 4 puntos de historia
+
+**Asignado a:** Equipo de Base de Datos
+
+**Etiquetas:** Base de Datos, PostgreSQL, Sprint 1
+
+**Comentarios:**
+
+- Se debe probar con datos de ejemplo antes de habilitar en producción.
+- Validar rendimiento de las consultas con grandes volúmenes de datos.
+
+**Enlaces:**
+
+- [Modelo de Datos](#3-modelo-de-datos)
+
+**Historial de Cambios:**
+
+- 16/02/2025: Creado por Jorge
 
 ---
 
 ## 7. Pull Requests
 
-> Documenta 3 de las Pull Requests realizadas durante la ejecución del proyecto
-
 **Pull Request 1**
+
+Resumen de la Documentación Generada para Close AI
+
+1. Descripción General del Producto
+
+   - Objetivo: Automatizar la comparación de transacciones bancarias desde archivos Excel.
+   - Características principales: Carga de archivos, procesamiento de transacciones, comparación y generación de reportes en Excel.
+   - Infraestructura: Backend en FastAPI, frontend en Next.js, base de datos en PostgreSQL.
+
+2. Arquitectura del Sistema
+
+   - Diagrama de arquitectura: Representación en Mermaid.js de la interacción entre frontend, backend y base de datos.
+   - Componentes principales: API REST, procesamiento con Pandas/FAISS, almacenamiento en PostgreSQL, generación de reportes.
+   - Despliegue: Backend con Docker y Nginx, frontend en Vercel, base de datos en servidor PostgreSQL.
+
+3. Modelo de Datos
+
+   - Entidades principales:
+   - archivos: Almacena los archivos subidos.
+   - transacciones: Contiene las transacciones procesadas.
+   - Relaciones: Cada archivo tiene múltiples transacciones.
+   - Optimización: Uso de JSONB para campos dinámicos y claves foráneas con eliminación en cascada.
+
+4. Especificación de la API
+
+   - POST /upload: Carga archivos Excel y procesa las transacciones.
+   - GET /comparar-excel: Compara dos archivos y genera un reporte en Excel con coincidencias y discrepancias.
+   - GET /archivo/{archivo_id}: Consulta las transacciones de un archivo específico.
+
+5. Historias de Usuario
+
+   - Subir archivo Excel para procesamiento.
+   - Comparar transacciones de dos archivos y generar un reporte.
+   - Consultar transacciones de un archivo para validación previa.
+
+6. Tickets de Trabajo
+
+   - Backend: Implementar el endpoint POST /upload para carga y procesamiento.
+   - Frontend: Desarrollar la UI de carga de archivos.
+   - Base de Datos: Crear estructura de almacenamiento de transacciones en PostgreSQL.
+
+7. Seguridad (para futuras versiones)
+
+- Sin autenticación en el MVP, pero con posibilidad de agregar API Key en futuras iteraciones.
+- Protección de datos: Validación de formatos, sanitización de datos, restricciones CORS.
 
 **Pull Request 2**
 

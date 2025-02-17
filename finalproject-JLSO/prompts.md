@@ -100,7 +100,7 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 2:**
 
 ```
-
+genera un prompt para la creación del diagrama de arquitectura de el proyecto close ai para el programa diagramgpt
 ```
 
 **Prompt 3:**
@@ -114,7 +114,9 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+continuamos con el siguiente punto: ### **2.2. Descripción de componentes principales:**
 
+> Describe los componentes más importantes, incluyendo la tecnología utilizada. Ten en cuenta que no se van a guardar los archivos de excel generados(se van a descargar desde la interfaz de usuario), proporciona la respuesta en un bloque texto en texto plano markdown para copiar facilmente. Se breve y conciso en las definiciones
 ```
 
 **Prompt 2:**
@@ -134,7 +136,9 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+Ahora definamos el siguiente punto: ### **2.3. Descripción de alto nivel del proyecto y estructura de ficheros**
 
+> Representa la estructura del proyecto y explica brevemente el propósito de las carpetas principales, así como si obedece a algún patrón o arquitectura específica.
 ```
 
 **Prompt 2:**
@@ -154,19 +158,21 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+Continuamos con la siguiente definición: ### **2.4. Infraestructura y despliegue**
 
+> Detalla la infraestructura del proyecto, incluyendo un diagrama en el formato que creas conveniente, y explica el proceso de despliegue que se sigue
 ```
 
 **Prompt 2:**
 
 ```
-
+en las instrucciones de despliegue ten en cuenta que el front se desplegará en vercel cada que se haga push a la rama main
 ```
 
 **Prompt 3:**
 
 ```
-
+has las instrucciones de despliegue mas concisas, asume que ya tengo configurado variables de entorno, conexiones a los servicios etc
 ```
 
 ### **2.5. Seguridad**
@@ -174,13 +180,15 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+continuemos con la siguiente definición: ### **2.5. Seguridad**
 
+> Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede
 ```
 
 **Prompt 2:**
 
 ```
-
+como la documentación es para el mvp de este proyecto, quiero manejar de la forma mas sencilla posible el acceso al uso de la herramienta, no quiero destinar muchos recursos a la parte de autenticación de usuarios, que alternativa podría usar?
 ```
 
 **Prompt 3:**
@@ -194,7 +202,7 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
-
+Ahora vamos a definir los tests, sugiere los principales tests que debería implementar para mi aplicación, de forma breve y clara
 ```
 
 **Prompt 2:**
@@ -216,7 +224,15 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+Ahora define la parte del modelo de datos: ## 3. Modelo de Datos
 
+### **3.1. Diagrama del modelo de datos:**
+
+> Recomendamos usar mermaid para el modelo de datos, y utilizar todos los parámetros que permite la sintaxis para dar el máximo detalle, por ejemplo las claves primarias y foráneas.
+
+### **3.2. Descripción de entidades principales:**
+
+> Recuerda incluir el máximo detalle de cada entidad, como el nombre y tipo de cada atributo, descripción breve si procede, claves primarias y foráneas, relaciones y tipo de relación, restricciones (unique, not null…), etc.
 ```
 
 **Prompt 2:**
@@ -238,19 +254,21 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+Define los endpoints principales de mi aplicación: ## 4. Especificación de la API
 
+> Si tu backend se comunica a través de API, describe los endpoints principales (máximo 3) en formato OpenAPI. Opcionalmente puedes añadir un ejemplo de petición y de respuesta para mayor claridad
 ```
 
 **Prompt 2:**
 
 ```
-
+en que caso usaría el tercer endpoint?
 ```
 
 **Prompt 3:**
 
 ```
-
+Dejémoslo, pues será util al momento del desarrollo, para validar si el archivo se cargó bien
 ```
 
 ---
@@ -260,7 +278,18 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+Ahora creemos algunas historias de usuario para nuestro proyecto, sigue las siguientes instrucciones:
 
+## 5. Historias de Usuario
+
+> Documenta 3 de las historias de usuario principales utilizadas durante el desarrollo, teniendo en cuenta las buenas prácticas de producto al respecto.
+
+Estructura basica de una User Story
+Formato estándar: "Como [tipo de usuario], quiero [realizar una acción] para [obtener un beneficio]".
+Descripción: Una descripción concisa y en lenguaje natural de la funcionalidad que el usuario desea.
+Criterios de Aceptación: Condiciones específicas que deben cumplirse para considerar la User Story como "terminada", éstos deberian de seguir un formato similar a “Dado que” [contexto inicial], "cuando” [acción realizada], “entonces” [resultado esperado].
+Notas adicionales:  Notas que puedan ayudar al desarrollo de la historia
+Tareas: Lista de tareas y subtareas para que esta historia pueda ser completada
 ```
 
 **Prompt 2:**
@@ -282,13 +311,84 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
+Ahora definamos los tickets de trabajo, sigue las siguientes instrucciones:
 
+## 6. Tickets de Trabajo
+
+> Documenta 3 de los tickets de trabajo principales del desarrollo, uno de backend, uno de frontend, y uno de bases de datos. Da todo el detalle requerido para desarrollar la tarea de inicio a fin teniendo en cuenta las buenas prácticas al respecto.
+
+Ten en cuenta los siguientes aspectos de un ticket de trabajo:
+Componentes de un Ticket de trabajo
+Un ticket de trabajo efectivo debe contener toda la información necesaria para que cualquier miembro del equipo comprenda y ejecute la tarea adecuadamente. Aquí se enumeran los elementos más importantes que debería incluir un ticket de trabajo para maximizar su claridad y eficacia:
+
+1. Título Claro y Conciso
+
+Un resumen breve que refleje la esencia de la tarea. Debe ser lo suficientemente descriptivo para que cualquier miembro del equipo entienda rápidamente de qué se trata el ticket.
+
+2. Descripción Detallada
+
+Propósito: Explicación de por qué es necesaria la tarea y qué problema resuelve.
+Detalles Específicos: Información adicional sobre requerimientos específicos, restricciones, o condiciones necesarias para la realización de la tarea.
+3. Criterios de Aceptación
+
+Expectativas Claras: Lista detallada de condiciones que deben cumplirse para que el trabajo en el ticket se considere completado.
+Pruebas de Validación: Pasos o pruebas específicas que se deben realizar para verificar que la tarea se ha completado correctamente.
+4. Prioridad
+
+Nivel de Urgencia: Una clasificación de la importancia y la urgencia de la tarea, lo cual ayuda a determinar el orden en que deben ser abordadas las tareas dentro del backlog.
+5. Estimación de Esfuerzo
+
+Puntos de Historia o Tiempo Estimado: Una evaluación del tiempo o esfuerzo que se espera que tome completar el ticket. Esto es esencial para la planificación y gestión del tiempo del equipo.
+6. Asignación
+
+Responsable: Quién o qué equipo será responsable de completar la tarea. Esto asegura que todos los involucrados entiendan quién está a cargo de cada parte del proyecto.
+7. Etiquetas o Tags
+
+Categorización: Etiquetas que ayudan a clasificar el ticket por tipo (bug, mejora, tarea, etc.), por características del producto (UI, backend, etc.), o por sprint/versión.
+8. Comentarios y Notas
+
+Colaboración: Espacio para que los miembros del equipo agreguen información relevante, hagan preguntas, o proporcionen actualizaciones sobre el progreso de la tarea.
+9. Enlaces o Referencias
+
+Documentación Relacionada: Enlaces a documentos, diseños, especificaciones o tickets relacionados que proporcionen contexto adicional o información necesaria para la ejecución de la tarea.
+10. Historial de Cambios
+
+Rastreo de Modificaciones: Un registro de todos los cambios realizados en el ticket, incluyendo actualizaciones de estado, reasignaciones y modificaciones en los detalles o prioridades.
+
+Ejemplo de un Ticket de trabajo bien formulado
+Un ticket de trabajo bien estructurado es crucial para la gestión eficiente de proyectos Agile. Debe proporcionar toda la información necesaria de manera clara y accesible para facilitar la ejecución de las tareas y la colaboración entre los miembros del equipo. Aquí te mostramos un ejemplo que puedes usar como referencia, e incluso usar como plantilla en tu asistente IA para estructurar la información de una manera estándar para tus proyectos:
+
+Título: Implementación de Autenticación de Dos Factores (2FA)
+
+Descripción: Añadir autenticación de dos factores para mejorar la seguridad del login de usuarios. Debe soportar aplicaciones de autenticación como Authenticator y mensajes SMS.
+
+Criterios de Aceptación:
+
+Los usuarios pueden seleccionar 2FA desde su perfil.
+Soporte para Google Authenticator y SMS.
+Los usuarios deben confirmar el dispositivo 2FA durante la configuración.
+Prioridad: Alta
+
+Estimación: 8 puntos de historia
+
+Asignado a: Equipo de Backend
+
+Etiquetas: Seguridad, Backend, Sprint 10
+
+Comentarios: Verificar la compatibilidad con la base de usuarios internacionales para el envío de SMS.
+
+Enlaces: Documento de Especificación de Requerimientos de Seguridad
+
+Historial de Cambios:
+
+01/10/2023: Creado por [nombre]
+05/10/2023: Prioridad actualizada a Alta por [nombre]
 ```
 
 **Prompt 2:**
 
 ```
-
+En la sección historial de cambios pon: creado por Jorge, elimina "Se agregaron índices en id_transaccion para optimización" y elimina los iconos
 ```
 
 **Prompt 3:**
@@ -304,7 +404,7 @@ Antes de empezar sugiere que formatos de DaC podríamos utilizar para generar el
 **Prompt 1:**
 
 ```
-
+lista los puntos principales de toda la documentacion que generamos. se breve y conciso
 ```
 
 **Prompt 2:**
