@@ -57,11 +57,7 @@ El objetivo es seguir desarrollando este sistema, optimizando su precisión y ef
 
 ```
 Ahora tenemos que empezar a construir la documentación del proyecto, para cada sección hay que registrar los prompt utilizados para construir esa parte de la documentación. Aquí están los formatos de la documentación del proyecto y de el archivo donde se van a documentar los prompts utilizados, aún no empieces a sugerir nada, pues iremos paso a paso según lo indique.
-```
 
-**Prompt 3:**
-
-```
 Empecemos con la documentación, por la primera parte del proyecto "descripción breve del proyecto", en base a la documentación y contexto proporcionado, sugiere:
 1. una descripción breve del proyecto, el proyecto tiene como nombre "Close AI"
 2. Objetivo:
@@ -74,6 +70,12 @@ Empecemos con la documentación, por la primera parte del proyecto "descripción
    - Documenta de manera precisa las instrucciones para instalar y poner en marcha el proyecto en local (librerías, backend, frontend, servidor, base de datos, migraciones y semillas de datos, etc.)
    - El frontend será una aplicación en next y el backend una api en fastapi
    - Base de datos: postgresql
+```
+
+**Prompt 3:**
+
+```
+Renueva la documentación del proyecto en el @reamde.md, actualizando la sección de instalación del proyecto, en base a los cambios realizados en el proyecto. Incluye las instrucciones para instalar el proyecto en local, para el frontend y para el backend, tanto usando docker como env local.
 ```
 
 ---
@@ -144,7 +146,7 @@ Ahora definamos el siguiente punto: ### **2.3. Descripción de alto nivel del pr
 **Prompt 2:**
 
 ```
-
+En base a los nuevos cambios y los tests que se han creado, actualiza la documentación de alto nivel del proyecto y la estructura de ficheros en el archivo @readme.md
 ```
 
 **Prompt 3:**
@@ -208,7 +210,7 @@ Ahora vamos a definir los tests, sugiere los principales tests que debería impl
 **Prompt 2:**
 
 ```
-
+Según los tests que hemos creado, para las pruebas unitarias y de integración, para probar los servicios de la api, completa la información en el archivo @readme.md correspondiente a la documentación de los tests realizados.
 ```
 
 **Prompt 3:**
@@ -262,13 +264,13 @@ Define los endpoints principales de mi aplicación: ## 4. Especificación de la 
 **Prompt 2:**
 
 ```
-en que caso usaría el tercer endpoint?
+Se relaizaron algunos cambios en la api, especificamente en el endpoint de upload de archivos, actualiza la documentación de la api en base a los cambios realizados.
 ```
 
 **Prompt 3:**
 
 ```
-Dejémoslo, pues será util al momento del desarrollo, para validar si el archivo se cargó bien
+
 ```
 
 ---
@@ -404,7 +406,7 @@ En la sección historial de cambios pon: creado por Jorge, elimina "Se agregaron
 **Prompt 1:**
 
 ```
-
+crea un archivo readme donde incluyas un resumen de todo lo que se implementó hasta el momento en este proyecto, incluye la creación del back, las bases de datos, los endpoints, los servicios, las vistas del frontend y los tests que hemos creado. este resumen de cambios servira para incluirlo como descripción en un pull request así que se breve y conciso.
 ```
 
 **Prompt 2:**
