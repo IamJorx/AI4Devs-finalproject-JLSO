@@ -412,7 +412,9 @@ crea un archivo readme donde incluyas un resumen de todo lo que se implementó h
 **Prompt 2:**
 
 ```
+ahora actualiza la sección de pull requests. en el pull request numero 2 registra que se entrega el proyecto con las configuraciones de despliegue del proyecto.
 
+esta configuración de railway.toml y las modificaciones del dockerfile para la migración de la base de datos es incorrecta
 ```
 
 **Prompt 3:**
